@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>aridercas | Tech Art Nexus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap');
+
+        :root {
+            --n-bg: #ffffff;
+            --n-sidebar: #fbfbfa;
+            --n-text: #37352f;
+            --n-border: #edece9;
+            --n-cyan: #06b6d4;
+        }
+
+        body {
+            background-color: var(--n-bg);
+            color: var(--n-text);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        aside {
+            width: 260px;
+            background-color: var(--n-sidebar);
+            height: 100vh;
+            position: fixed;
+            border-right: 1px solid var(--n-border);
+            padding: 32px 16px;
+            display: flex;
+            flex-direction: column;
+            z-index: 50;
+        }
+
+        main {
+            margin-left: 260px;
+            width: 100%;
+            max-width: 900px;
+            padding: 80px 60px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 4px;
+            color: var(--n-text);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .nav-link:hover { background-color: #efefed; }
+        .nav-link i { margin-right: 12px; font-style: normal; width: 20px; text-align: center; color: #999; }
+
+        h1 { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px; }
+        h2 { font-size: 26px; font-weight: 700; margin-top: 48px; margin-bottom: 16px; border-bottom: 1px solid var(--n-border); padding-bottom: 8px; }
+        
+        .chart-box {
+            width: 100%;
+            height: 300px;
+            margin: 32px 0;
+            padding: 20px;
+            border: 1px solid var(--n-border);
+            border-radius: 8px;
+        }
+
+        .ai-card {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            padding: 24px;
+            border-radius: 8px;
+            margin-top: 40px;
+        }
+
+        textarea {
+            width: 100%;
+            border: 1px solid #ddd;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            margin-bottom: 12px;
+            outline: none;
+        }
+
+        .savings-widget {
+            background: #f1f1ef;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: auto;
+            font-size: 11px;
+        }
+
+        #ai-output {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 16px;
+            border-radius: 6px;
+            margin-top: 16px;
+            font-size: 13px;
+            display: none;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            aside { width: 60px; padding: 20px 8px; }
+            .nav-text, .header-text { display: none; }
+            main { margin-left: 60px; padding: 40px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<aside>
+    <div class="mb-8 px-2 flex items-center gap-2">
+        <div class="w-7 h-7 bg-green-600 rounded flex items-center justify-center text-white font-bold text-[10px]">AR</div>
+        <span class="header-text font-bold text-sm">aridercas</span>
+    </div>
+    
+    <nav class="flex-grow">
+        <a href="#math" class="nav-link"><i>&#8721;</i><span class="nav-text">Matemáticas</span></a>
+        <a href="#scripting" class="nav-link"><i>&#60;&#47;&#62;</i><span class="nav-text">Scripting</span></a>
+        <a href="#pipeline" class="nav-link"><i>&#9881;</i><span class="nav-text">Pipeline</span></a>
+        <a href="#ai-lab" class="nav-link"><i style="color: var(--n-cyan)">&#10024;</i><span class="nav-text font-bold text-cyan-600">AI Nexus Lab</span></a>
+    </nav>
+    
+    <div class="savings-widget nav-text">
+        <div class="font-bold text-gray-500 mb-2 uppercase tracking-tighter">Plan de Ahorro</div>
+        <div class="flex justify-between mb-1">
+            <span>Objetivo: 500€-1000€</span>
+            <span class="font-bold text-cyan-600">75%</span>
+        </div>
+        <div class="w-full bg-gray-300 h-1 rounded-full overflow-hidden">
+            <div class="bg-cyan-500 h-full" style="width: 75%"></div>
+        </div>
+    </div>
+</aside>
+
+<main>
+    <section>
+        <h1>Technical Artist Guide</h1>
+        <p class="text-gray-500 text-lg">Documentación y herramientas de optimización para desarrollo de videojuegos por <strong>aridercas</strong>.</p>
+    </section>
+
+    <section id="math">
+        <h2>1. Matemáticas Aplicadas</h2>
+        <p>Fundamentos de álgebra lineal para Shaders y VFX.</p>
+        <div class="chart-box">
+            <canvas id="mathChart"></canvas>
+        </div>
+    </section>
+
+    <section id="ai-lab">
+        <div class="ai-card">
+            <h3 class="font-bold text-cyan-800 mb-4 flex items-center gap-2">
+                <span>&#10024;</span> Consulta Técnica AI
+            </h3>
+            <textarea id="ai-input" rows="3" placeholder="Ej: Optimiza este shader de agua o explica el Dot Product..."></textarea>
+            <button onclick="askAI()" class="bg-cyan-600 text-white px-4 py-2 rounded font-bold text-xs">Consultar Gemini</button>
+            
+            <div id="ai-loading" class="hidden mt-4 text-xs text-cyan-600 italic">Consultando núcleo de conocimiento...</div>
+            <div id="ai-output"></div>
+        </div>
+    </section>
+
+    <footer class="mt-24 pt-8 border-t border-gray-100 text-[10px] text-gray-400">
+        ARIDERCAS &copy; 2024 | DEPLOYED VIA GITHUB PAGES
+    </footer>
+</main>
+
+<script>
+    const apiKey = ""; // La clave se gestiona automáticamente
+
+    window.onload = function() {
+        new Chart(document.getElementById('mathChart'), {
+            type: 'radar',
+            data: {
+                labels: ['Vectores', 'Matrices', 'Trigonometría', 'Física', 'Cuaterniones'],
+                datasets: [{
+                    label: 'Relevancia',
+                    data: [95, 88, 70, 65, 80],
+                    borderColor: '#06b6d4',
+                    backgroundColor: 'rgba(6, 182, 212, 0.1)'
+                }]
+            },
+            options: { maintainAspectRatio: false, scales: { r: { ticks: { display: false } } } }
+        });
+    };
+
+    async function askAI() {
+        const query = document.getElementById('ai-input').value;
+        if (!query) return;
+
+        const loading = document.getElementById('ai-loading');
+        const output = document.getElementById('ai-output');
+        
+        loading.classList.remove('hidden');
+        output.style.display = 'none';
+
+        try {
+            const result = await fetchGemini(query);
+            output.textContent = result;
+            output.style.display = 'block';
+        } catch (e) {
+            output.textContent = "Error al conectar con la IA.";
+            output.style.display = 'block';
+        } finally {
+            loading.classList.add('hidden');
+        }
+    }
+
+    async function fetchGemini(q) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: q }] }] })
+        });
+        const data = await response.json();
+        return data.candidates[0].content.parts[0].text;
+    }
+</script>
+</body>
+</html>

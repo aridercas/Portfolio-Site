@@ -23,21 +23,31 @@
     <div id="content">Selecciona un ejercicio del menú para comenzar.</div>
 
     <script>
-        // 1. Cargar el menú lateral (sidebar.md)
-        fetch('sidebar.md')
-            .then(response => response.text())
+         
+        fetch('sidebar.md') // <--- ASEGÚRATE DE QUE SE LLAME EXACTAMENTE ASÍ EN GITHUB
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("No se pudo cargar sidebar.md. ¿El nombre es correcto?");
+                }
+                return response.text();
+            })
             .then(text => {
+                console.log("Archivo cargado con éxito"); // Verás esto en la consola F12
                 document.getElementById('sidebar').innerHTML = marked.parse(text);
                 
-                // Hacer que los enlaces del menú carguen el contenido en el div principal
+                // Configurar clics
                 document.querySelectorAll('#sidebar a').forEach(link => {
                     link.onclick = (e) => {
                         e.preventDefault();
-                        const file = link.getAttribute('href');
-                        cargarContenido(file);
+                        cargarContenido(link.getAttribute('href'));
                     };
                 });
-            });
+            })
+            
+    .catch(err => {
+        document.getElementById('sidebar').innerHTML = "Error: " + err.message;
+        console.error(err);
+    });
 
         // 2. Función para cargar cualquier archivo .md en el centro
         function cargarContenido(archivo) {

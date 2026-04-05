@@ -1,22 +1,58 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Mi Joy of Vex Personal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+    <meta charset="UTF-8">
+    <title>Joy of Studies</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body { font-family: sans-serif; display: flex; margin: 0; height: 100vh; }
+        #sidebar { 
+            width: 250px; background: #f4f4f4; border-right: 1px solid #ddd; 
+            padding: 20px; overflow-y: auto; flex-shrink: 0;
+        }
+        #content { padding: 40px; overflow-y: auto; flex-grow: 1; line-height: 1.6; }
+        pre { background: #272822; color: #fff; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: monospace; }
+        a { color: #007bff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
 </head>
 <body>
-  <div id="app">Cargando programa...</div>
-  <script>
-    window.$docsify = {
-      name: 'Mi Academia de Ejercicios',
-      repo: '',
-      loadSidebar: true, // Esto habilita el menú lateral
-      subMaxLevel: 3,    // Esto hace que tus ### aparezcan en el menú
-      auto2top: true,
-    }
-  </script>
-  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+
+    <div id="sidebar">Cargando menú...</div>
+    <div id="content">Selecciona un ejercicio del menú para comenzar.</div>
+
+    <script>
+        // 1. Cargar el menú lateral (sidebar.md)
+        fetch('sidebar.md')
+            .then(response => response.text())
+            .then(text => {
+                document.getElementById('sidebar').innerHTML = marked.parse(text);
+                
+                // Hacer que los enlaces del menú carguen el contenido en el div principal
+                document.querySelectorAll('#sidebar a').forEach(link => {
+                    link.onclick = (e) => {
+                        e.preventDefault();
+                        const file = link.getAttribute('href');
+                        cargarContenido(file);
+                    };
+                });
+            });
+
+        // 2. Función para cargar cualquier archivo .md en el centro
+        function cargarContenido(archivo) {
+            fetch(archivo)
+                .then(response => {
+                    if (!response.ok) throw new Error('Archivo no encontrado');
+                    return response.text();
+                })
+                .then(text => {
+                    document.getElementById('content').innerHTML = marked.parse(text);
+                })
+                .catch(err => {
+                    document.getElementById('content').innerHTML = " Error: " + err.message;
+                });
+        }
+    </script>
 </body>
 </html>
